@@ -1,4 +1,4 @@
-"""Convert a ipynb notebook into a rst file that jupyter-sphink can read.
+"""Convert a ipynb notebook into a rst file that jupyter-sphinx can read.
 
 Functions:
     convert_notebook(input_path:Path, output_path:Path)
