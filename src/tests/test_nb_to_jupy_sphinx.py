@@ -1,5 +1,6 @@
 from .. import nb_to_jupy_sphinx
 from pathlib import Path
+import pytest
 
 
 def test_file_regression(file_regression):
@@ -59,6 +60,14 @@ def test_get_type_and_content():
         "markdown",
         ["love u"],
     )
+    strange_notebook = Path.cwd() / Path(
+        "src/tests/example_notebooks/strange_notebook.json"
+    )
+    with pytest.raises(
+        ValueError,
+        match="cells type must be 'code' or 'markdown' but we encountered a 'strange' cell.",
+    ):
+        nb_to_jupy_sphinx.convert_notebook(strange_notebook, "output.rst")
 
 
 def test_format_code():
@@ -95,3 +104,11 @@ def test_format_markdown():
     ]
     expected_output = 'Title\n======\n\n1\n--\n\n2\n--\n\n4\n^^\n\n5\n^^\n\n- list1\n- list2\n- list3\n  - sublist1\n  - sublist2\n  - sublist3\n\n6\n""\n\n**7**'
     assert nb_to_jupy_sphinx._format_markdown(complicated_cell) == expected_output
+
+
+def test_input_and_output_format():
+    """Test files extensions for convert_notebook."""
+    with pytest.raises(
+        ValueError, match="input_path should point to an ipynb or json file"
+    ):
+        nb_to_jupy_sphinx.convert_notebook(Path("test.file"), Path("test.rst"))
