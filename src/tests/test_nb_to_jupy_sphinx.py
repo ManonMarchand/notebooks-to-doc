@@ -30,7 +30,7 @@ def test_extract_notebook_cells():
                     "output_type": "execute_result",
                 }
             ],
-            "source": ["1+1"],
+            "source": ["1 + 1"],
         },
         {"cell_type": "markdown", "metadata": {}, "source": ["Markdown here"]},
     ]
@@ -51,6 +51,47 @@ def test_get_type_and_content():
                 "output_type": "execute_result",
             }
         ],
-        "source": ["1+1"],
+        "source": ["1 + 1"],
     }
-    assert nb_to_jupy_sphinx._get_type_and_content(code_cell) == ("code", ["1+1"])
+    assert nb_to_jupy_sphinx._get_type_and_content(code_cell) == ("code", ["1 + 1"])
+    markdown_cell = {"cell_type": "markdown", "metadata": {}, "source": ["love u"]}
+    assert nb_to_jupy_sphinx._get_type_and_content(markdown_cell) == (
+        "markdown",
+        ["love u"],
+    )
+
+
+def test_format_code():
+    """Test of format code."""
+    assert (
+        nb_to_jupy_sphinx._format_code(["1 + 1"])
+        == "\n.. jupyter-execute::\n    1 + 1\n"
+    )
+
+
+def test_format_markdown():
+    """Test fro format markdown."""
+    complicated_cell = [
+        "# Title\n",
+        "\n",
+        "## 1\n",
+        "\n",
+        "## 2\n",
+        "\n",
+        "### 4\n",
+        "\n",
+        "### 5\n",
+        "\n",
+        "- list1\n",
+        "- list2\n",
+        "- list3\n",
+        "  - sublist1\n",
+        "  - sublist2\n",
+        "  - sublist3\n",
+        "\n",
+        "#### 6\n",
+        "\n",
+        "##### 7",
+    ]
+    expected_output = 'Title\n======\n\n1\n--\n\n2\n--\n\n4\n^^\n\n5\n^^\n\n- list1\n- list2\n- list3\n  - sublist1\n  - sublist2\n  - sublist3\n\n6\n""\n\n**7**'
+    assert nb_to_jupy_sphinx._format_markdown(complicated_cell) == expected_output
