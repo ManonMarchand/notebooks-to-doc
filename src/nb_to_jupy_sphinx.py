@@ -34,6 +34,7 @@ def _convert_line_to_rst(title: str) -> str:
     - ## -> -
     - ### -> ^
     - #### -> "
+    - more than 4 -> bold caracters
 
     Parameters
     ----------
@@ -53,8 +54,10 @@ def _convert_line_to_rst(title: str) -> str:
         hashtags = title.split(" ")[0]
         len_hashtags = len(hashtags)
         text = title[len_hashtags + 1 :]
-        converter = {1: "=", 2: "-", 3: "^", 4: '"'}
-        return f"{text}{converter[len_hashtags]*len(text)}\n"
+        if len_hashtags < 5:
+            converter = {1: "=", 2: "-", 3: "^", 4: '"'}
+            return f"{text}{converter[len_hashtags]*len(text)}\n"
+        return f"**{text}**"
 
 
 def _format_markdown(source: list) -> str:
