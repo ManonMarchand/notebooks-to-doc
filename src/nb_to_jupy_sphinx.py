@@ -86,10 +86,8 @@ def convert_notebook(input_path: Path, output_path: Path):
         Raised if input_path does not point to a
         ipynb or json file
     """
-    if str(input_path)[-6:] not in [".ipynb", ".IPYNB", ".json", ".JSON"]:
+    if str(input_path).split(".")[-1] not in ["ipynb", "IPYNB", "json", "JSON"]:
         raise ValueError("input_path should point to an ipynb or json file")
-    if str(output_path)[-4:] not in [".rst", ".RST"]:
-        output_path += ".rst"
     notebook_cells = _extract_notebook_cells(input_path)
     rst_file = ""
     for cell in notebook_cells:
