@@ -4,4 +4,5 @@ Jupyter-sphinx repo : [here](https://github.com/jupyter/jupyter-sphinx "https://
 
 ## TODO
 
-transform into a cli
+- [ ] transform into a cli
+- [ ] add example usage
